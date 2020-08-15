@@ -38,7 +38,7 @@ describe('CreateAppoinment', () => {
      * de AppError ou Error
      */
 
-    expect(
+    await expect(
       createAppointment.execute({
         date: appointmentDate,
         provider_id: '123123',
