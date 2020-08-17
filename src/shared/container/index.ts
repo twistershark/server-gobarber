@@ -9,13 +9,8 @@ import AppointmentsRepository from '@modules/appointments/infra/typeorm/reposito
 import IUsersRepository from '@modules/users/repositories/IUsersRepositories';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
-/**
- * Importamos a interface para forçar que a dependência informada como segundo
- * parâmetro ali seja no formato daquela interface.
- *
- * Esse registerSingleton recebe dois parâmetros. O primeiro é o id/nome daquele
- * registro e o segundo é o dado em si.
- */
+import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
+import UserTokensRepository from '@modules/users/infra/typeorm/repositories/UserTokensRepository';
 
 container.registerSingleton<IAppointmentsRepository>(
   'AppointmentsRepository',
@@ -25,4 +20,9 @@ container.registerSingleton<IAppointmentsRepository>(
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
+);
+
+container.registerSingleton<IUserTokensRepository>(
+  'UserTokensRepository',
+  UserTokensRepository,
 );
