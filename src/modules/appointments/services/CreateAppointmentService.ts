@@ -1,9 +1,11 @@
-import { startOfHour, isBefore, getHours } from 'date-fns';
+import { startOfHour, isBefore, getHours, format } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+
 import Appointment from '../infra/typeorm/entities/Appointment';
 
 interface IRequest {
@@ -12,16 +14,14 @@ interface IRequest {
   date: Date;
 }
 
-/**
- * Em todas as classes que formos utilizar injeção de dependências,
- * precisamos utilizar esse decorator informando que a classe é injectable
- * e dentro do constructor, informamos oq deve ser injetado.
- */
 @injectable()
 class CreateAppointmentService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository,
   ) {}
 
   public async execute({
@@ -57,6 +57,17 @@ class CreateAppointmentService {
       provider_id,
       user_id,
       date: appointmentDate,
+    });
+
+    /**
+     * Para podermos escapar da formatação com aquele às, vamos usar aspas simples
+     * dentro de aspas duplas
+     */
+    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'");
+
+    await this.notificationsRepository.create({
+      recipient_id: provider_id,
+      content: `Novo agendamento para dia ${dateFormatted}`,
     });
 
     return appointment;
