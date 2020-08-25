@@ -12,7 +12,7 @@ export default class SESMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor(
-    @inject('MailTemplateProvider')
+    @inject('MailProvider')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
     this.client = nodemailer.createTransport({
