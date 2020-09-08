@@ -3,7 +3,7 @@ import aws from 'aws-sdk';
 import mailConfig from 'config/mail';
 import { inject, injectable } from 'tsyringe';
 
-import IMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/models/IMailTemplateProvider';
+import IMailTemplateProvider from '../../MailTemplateProvider/models/IMailTemplateProvider';
 import IMailProvider from '../models/IMailProvider';
 import ISendMailDTO from '../dtos/ISendMailDTO';
 
@@ -12,7 +12,7 @@ export default class SESMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor(
-    @inject('MailProvider')
+    @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
     this.client = nodemailer.createTransport({

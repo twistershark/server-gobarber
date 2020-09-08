@@ -6,10 +6,10 @@ import mime from 'mime';
 import IStorageProvider from '../models/IStorageProvider';
 
 class DiskStorageProvider implements IStorageProvider {
-  private client: S3;
+  private storageClient: S3;
 
   constructor() {
-    this.client = new aws.S3({
+    this.storageClient = new aws.S3({
       region: 'us-east-1',
     });
   }
@@ -25,7 +25,7 @@ class DiskStorageProvider implements IStorageProvider {
 
     const fileContent = await fs.promises.readFile(originalPath);
 
-    await this.client
+    await this.storageClient
       .putObject({
         Bucket: uploadConfig.config.aws.bucket,
         Key: file,
@@ -41,7 +41,7 @@ class DiskStorageProvider implements IStorageProvider {
   }
 
   public async deleteFile(file: string): Promise<void> {
-    await this.client
+    await this.storageClient
       .deleteObject({
         Bucket: uploadConfig.config.aws.bucket,
         Key: file,
